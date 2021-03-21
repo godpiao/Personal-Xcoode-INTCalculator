@@ -11,12 +11,12 @@
 		108994202605CFC0002045E5 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1089941F2605CFC0002045E5 /* Tests_macOS.swift */; };
 		108994222605CFC0002045E5 /* INTCalculatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108993F92605CFBE002045E5 /* INTCalculatorApp.swift */; };
 		108994232605CFC0002045E5 /* INTCalculatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108993F92605CFBE002045E5 /* INTCalculatorApp.swift */; };
-		108994242605CFC0002045E5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108993FA2605CFBE002045E5 /* ContentView.swift */; };
 		108994252605CFC0002045E5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108993FA2605CFBE002045E5 /* ContentView.swift */; };
 		108994262605CFC0002045E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 108993FB2605CFC0002045E5 /* Assets.xcassets */; };
 		108994272605CFC0002045E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 108993FB2605CFC0002045E5 /* Assets.xcassets */; };
 		108994432605E7D8002045E5 /* memo in Resources */ = {isa = PBXBuildFile; fileRef = 108994422605E7D8002045E5 /* memo */; };
 		108994442605E7D8002045E5 /* memo in Resources */ = {isa = PBXBuildFile; fileRef = 108994422605E7D8002045E5 /* memo */; };
+		1089944D26064751002045E5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108993FA2605CFBE002045E5 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +38,7 @@
 
 /* Begin PBXFileReference section */
 		108993F92605CFBE002045E5 /* INTCalculatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = INTCalculatorApp.swift; sourceTree = "<group>"; };
-		108993FA2605CFBE002045E5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		108993FA2605CFBE002045E5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; usesTabs = 0; };
 		108993FB2605CFC0002045E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		108994002605CFC0002045E5 /* INTCalculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = INTCalculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		108994032605CFC0002045E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -314,7 +314,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				108994242605CFC0002045E5 /* ContentView.swift in Sources */,
+				1089944D26064751002045E5 /* ContentView.swift in Sources */,
 				108994222605CFC0002045E5 /* INTCalculatorApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

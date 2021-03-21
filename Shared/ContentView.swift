@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+
+
+
+
+
 struct SingleView: View {
     @State var txtName = ""
     @Binding var txtValue:String
@@ -37,7 +42,7 @@ struct SingleView: View {
 struct ContentView: View {
     
     //显示接受输入内容
-    @State private var strItems:[String] = ["贷款金额","利率", "分期手续费"]
+    @State private var strItems:[String] = ["分期期数","每期手续费率", "对应年利率"]
     @State private var strValues:[String] = ["","", ""]
     
     
@@ -46,6 +51,20 @@ struct ContentView: View {
     @State private var interest:Float = 0
     @State private var fee:Float = 0
     
+    func changefeeToInterest(periods:String, fee:String) -> String {
+        var result = ""
+        
+        if let per = Int(periods), let fee = Float(fee) {
+            //
+            
+        }
+        else
+        {
+            print ("not regual input period is \(periods), fee is \(fee)")
+        }
+       
+        return result
+    }
     
     // 调试输出值
     @State private var strShow = ""
@@ -66,9 +85,11 @@ struct ContentView: View {
             for str in strValues{
                 strShow += str
             }
+            
+            strValues[2] = changefeeToInterest(periods:strValues[0], fee: strValues[1])
         }) {
-                Text("显示结果")
-            }
+            Text("显示结果")
+        }
         Text(strShow)
         
     }
