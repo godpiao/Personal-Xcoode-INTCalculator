@@ -7,8 +7,15 @@
 
 import Foundation
 
+struct cal_int_detail : Hashable{
+    var id:Int
+    var intrst = 0.0
+    var captl = 0.0
+}
+
+
 struct RateCalculation{
-    let  periods = 0
+    var  periods = 0
     var  fee = 0.0
     var  interest=0.0
     
@@ -19,7 +26,7 @@ struct RateCalculation{
     
     
     //存储 每期还款本金和利息
-    var  details = [[String:Double]]()
+    var  details = [cal_int_detail]()
     
     mutating func cal_int_byfee()
     {
@@ -35,15 +42,15 @@ struct RateCalculation{
         percPi = debt * pow(1+interest, Double(periods)) * interest   /  (pow(1+interest, Double(periods)) - 1)
         totalfee  = percPi * Double(periods)
         
-        fee = (totalfee-debt)/Double(periods) * debt
+        fee = (totalfee-debt)/(Double(periods) * debt)
         var restdebt = debt
         for index in 1...periods{
-            var detail = [String:Double]()
+            var detail = cal_int_detail(id:index)
             
-            detail["interest"] = restdebt *  interest
-            detail["capit"] = percPi - restdebt *  interest
+            detail.intrst = restdebt *  interest
+            detail.captl = percPi - restdebt *  interest
             
-            restdebt -= detail["capit"] ?? 0.0
+            restdebt -= detail.captl
             
             details.append(detail)
             

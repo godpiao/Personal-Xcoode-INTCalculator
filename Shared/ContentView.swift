@@ -8,6 +8,18 @@
 import SwiftUI
 
 
+struct CalinterestView: View {
+    var calValue:String
+    var intrstValue:String
+    var body:some  View{
+        HStack{
+            Text(calValue)
+            Spacer()
+            Text(intrstValue)
+        }
+        .padding()
+    }
+}
 
 
 
@@ -42,8 +54,8 @@ struct SingleView: View {
 struct ContentView: View {
     
     //显示接受输入内容
-    @State private var strItems:[String] = ["分期期数","每期手续费率", "对应年利率"]
-    @State private var strValues:[String] = ["","", ""]
+    @State private var strItems:[String] = ["借款金额","分期期数","每期手续费率", "每期利率"]
+    @State private var strValues:[String] = ["10000","10", "0.005", "0.006"]
     
     
     // 储存输入变量
@@ -51,16 +63,33 @@ struct ContentView: View {
     @State private var interest:Float = 0
     @State private var fee:Float = 0
     
-    func changefeeToInterest(periods:String, fee:String) -> String {
+    @State private var detaillist = [cal_int_detail]()
+    
+    func changefeeToInterest(debt:String, periods:String, interest:String) -> String {
         var result = ""
         
-        if let per = Int(periods), let fee = Float(fee) {
+        if let debt = Double(debt), let per = Int(periods), let fee = Double(interest) {
             //
+            var calc = RateCalculation(  periods:per, fee: fee, interest: fee , debt:debt )
+            
+            calc.cal_fee_bycal()
+            detaillist = calc.details
+            strShow = String(format:"%.2f", calc.totalfee)
+            var index = 0
+            for item in strItems {
+                if item=="每期手续费率" {
+                    break
+                }
+                index += 1
+            }
+            
+            strValues[index] = String(format:"%.4f", calc.fee)// String(calc.fee)
+            
             
         }
         else
         {
-            print ("not regual input period is \(periods), fee is \(fee)")
+            print ("not regual input period is \(periods), fee is \(interest)")
         }
        
         return result
@@ -73,7 +102,7 @@ struct ContentView: View {
     var body: some View {
         VStack()
         {
-            ForEach(0...2,id:\.self){
+            ForEach(0..<strItems.count,id:\.self){
                 
                 SingleView(txtName: strItems[$0], txtValue: $strValues[$0])
             }
@@ -81,16 +110,23 @@ struct ContentView: View {
         
         // 显示测试结果
         Button(action: {
-            strShow.removeAll()
-            for str in strValues{
-                strShow += str
-            }
-            
-            strValues[2] = changefeeToInterest(periods:strValues[0], fee: strValues[1])
+            _ = changefeeToInterest(debt:strValues[0], periods:strValues[1], interest: strValues[3])
         }) {
             Text("显示结果")
         }
+        
         Text(strShow)
+        
+        if (!detaillist.isEmpty)
+        {
+          
+            List(detaillist, id: \.id) { detail in
+                CalinterestView(calValue: String(format:"%.2f",detail.captl), intrstValue: String(format:"%.2f",detail.intrst))
+                //SingleView(txtName: "111", txtValue: $strValues[1])
+                
+            }
+ 
+        }
         
     }
 }

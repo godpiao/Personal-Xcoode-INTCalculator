@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		10876AE026079EC2003FE316 /* RateCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10876ADF26079EC2003FE316 /* RateCalculation.swift */; };
+		10876AE126079EC2003FE316 /* RateCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10876ADF26079EC2003FE316 /* RateCalculation.swift */; };
 		108994152605CFC0002045E5 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108994142605CFC0002045E5 /* Tests_iOS.swift */; };
 		108994202605CFC0002045E5 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1089941F2605CFC0002045E5 /* Tests_macOS.swift */; };
 		108994222605CFC0002045E5 /* INTCalculatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108993F92605CFBE002045E5 /* INTCalculatorApp.swift */; };
@@ -37,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		10876ADF26079EC2003FE316 /* RateCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateCalculation.swift; sourceTree = "<group>"; };
 		108993F92605CFBE002045E5 /* INTCalculatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = INTCalculatorApp.swift; sourceTree = "<group>"; };
 		108993FA2605CFBE002045E5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; usesTabs = 0; };
 		108993FB2605CFC0002045E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -105,6 +108,7 @@
 				108993FA2605CFBE002045E5 /* ContentView.swift */,
 				108993FB2605CFC0002045E5 /* Assets.xcassets */,
 				108994422605E7D8002045E5 /* memo */,
+				10876ADF26079EC2003FE316 /* RateCalculation.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -315,6 +319,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1089944D26064751002045E5 /* ContentView.swift in Sources */,
+				10876AE026079EC2003FE316 /* RateCalculation.swift in Sources */,
 				108994222605CFC0002045E5 /* INTCalculatorApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,6 +329,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				108994252605CFC0002045E5 /* ContentView.swift in Sources */,
+				10876AE126079EC2003FE316 /* RateCalculation.swift in Sources */,
 				108994232605CFC0002045E5 /* INTCalculatorApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
