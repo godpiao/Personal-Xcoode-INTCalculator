@@ -105,7 +105,9 @@ struct ContentView: View {
             ForEach(0..<strItems.count,id:\.self){
                 
                 SingleView(txtName: strItems[$0], txtValue: $strValues[$0])
-            }
+            }.onChange(of: strValues, perform: { value in
+                _ = changefeeToInterest(debt:value[0], periods:value[1], aRate: value[3])
+            })
             HStack{
                 // 计算总还款额
                 Button(action: {
@@ -115,7 +117,7 @@ struct ContentView: View {
                 }
                 if mRate != "" {
                     Spacer()
-                    Text("月利率 \(mRate)")
+                    Text("月利率 \(mRate)%")
                 }
                 Spacer()
                 if totalpay != "" {
