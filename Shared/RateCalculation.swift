@@ -14,8 +14,17 @@ struct cal_int_detail : Hashable{
 }
 
 
+struct mathCalulate {
+    
+    //针对 输入0， 返回0， 并且单调递增或递减的函数 求反函数
+    static func getInverFun(param:Double, fun:(Double)->Double) ->Double
+    {
+        return 0.00
+    }
+}
+
 struct RateCalculation{
-    var  periods = 0
+    var  periods:UInt = 1
     
     
 
@@ -38,6 +47,20 @@ struct RateCalculation{
     }
     
     
+
+    
+    // y =  [(1+x)^n *x  /(1+x)^n - 1 ] - 1/n , x=0 时为0
+    func  getPerPayByRate(periods n:UInt, rate x:Double) -> Double {
+        if x <= 0.00000 {
+            return 0.00000
+        }
+        else
+        {
+            let en = pow((1+x), Double(n))
+            return en * x / (en-1)  - 1/Double(n)
+        }
+    }
+    
     
     var  percPi = 0.0       //每期本金利息和
     
@@ -55,13 +78,15 @@ struct RateCalculation{
     mutating func cal_fee_bycal()
     {
         //等额本息计算
-        percPi = debt * pow(1+mRate, Double(periods)) * mRate   /  (pow(1+mRate, Double(periods)) - 1)
+     
+
+        percPi = debt/Double(periods)  + getPerPayByRate(periods: periods, rate: mRate)
         totalfee  = percPi * Double(periods)
         
         fee = (totalfee-debt)/(Double(periods) * debt)
         var restdebt = debt
         for index in 1...periods{
-            var detail = cal_int_detail(id:index)
+            var detail = cal_int_detail(id:Int(index))
             
             detail.intrst = restdebt *  mRate
             detail.captl = percPi - restdebt *  mRate

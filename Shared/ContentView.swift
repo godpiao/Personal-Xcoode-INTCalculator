@@ -52,7 +52,7 @@ struct ContentView: View {
     //显示接受输入内容
    
 
-    @State private var strItems:[String] = [txtName["loan"]![0],txtName["period"]![0],txtName["fee"]![0], txtName["rate"]![0]]
+    let strItems:[String] = [txtName["loan"]![0],txtName["period"]![0],txtName["fee"]![0], txtName["rate"]![0]]
     
     @State private var strValues:[String] = [txtName["loan"]![1],txtName["period"]![1],txtName["fee"]![1], txtName["rate"]![1]]
     
@@ -66,24 +66,30 @@ struct ContentView: View {
     // 月利率
     @State private var mRate = ""
     
-    func changefeeToInterest(debt:String, periods:String, aRate:String) -> String {
+    func getValueIndex(name:String) -> Int{
+        var index = 0
+        for item in strItems {
+            if item==txtName[name]?[0] {
+                break
+            }
+            index += 1
+        }
+        
+        return index
+    }
+    
+    func changefeeToInterest(debt:String, periods:String, fee:String, aRate:String) -> String {
         let result = ""
         
-        if let debt = Double(debt), let per = Int(periods), let itrst = Double(aRate) {
+        if let debt = Double(debt), let per = UInt(periods), let fee = Double(fee), let itrst = Double(aRate) {
             //
-            var calc = RateCalculation(periods:per,debt:debt, mRate: 0.0)
+            var calc = RateCalculation(periods:per,debt:debt,fee:fee, mRate: 0.0)
             calc.aRate = itrst/100
             
             calc.cal_fee_bycal()
             detaillist = calc.details
             totalpay = String(format:"%.2f", calc.totalfee)
-            var index = 0
-            for item in strItems {
-                if item==txtName["fee"]![0] {
-                    break
-                }
-                index += 1
-            }
+            let index = getValueIndex(name: "fee")
             strValues[index] = String(format:"%.2f", calc.fee*100)// String(calc.fee)
             
             mRate = String(format: "%0.2f", calc.mRate*100)
@@ -106,12 +112,13 @@ struct ContentView: View {
                 
                 SingleView(txtName: strItems[$0], txtValue: $strValues[$0])
             }.onChange(of: strValues, perform: { value in
-                _ = changefeeToInterest(debt:value[0], periods:value[1], aRate: value[3])
+                let index1 = getValueIndex(name: "loan"), index2 = getValueIndex(name: "period"), index3 = getValueIndex(name: "fee"), index4 = getValueIndex(name: "rate")
+                _ = changefeeToInterest(debt:value[index1], periods:value[index2],fee:value[index3], aRate: value[index4])
             })
             HStack{
                 // 计算总还款额
                 Button(action: {
-                    _ = changefeeToInterest(debt:strValues[0], periods:strValues[1], aRate: strValues[3])
+                    
                 }) {
                     Text("显示结果")
                 }
