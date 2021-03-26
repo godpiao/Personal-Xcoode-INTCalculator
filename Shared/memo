@@ -17,6 +17,9 @@ swift 问题：
 swiftUI 问题：
     1. 子view 事件 如何通知父view （swiftUI 2.0 onChange？）
     (只能在赋值时， 把相互关系处理。   )
+    
+    2. 全局变量 储存数据 试改
+    3. State 了解
 
 
 编写问题遗留：

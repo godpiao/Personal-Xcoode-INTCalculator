@@ -8,6 +8,16 @@
 import SwiftUI
 
 
+let txtName:[String:[String]] = ["loan":["借款金额","10000"], "period":["分期期数（月）","12"],"fee":["每期费率%","0.5"],"rate":["折算年利率%","10"],]
+
+final class ModelData: ObservableObject {
+    
+    let names:[String] = [txtName["loan"]![0],txtName["period"]![0],txtName["fee"]![0], txtName["rate"]![0]]
+    
+    @Published var values:[String] = [txtName["loan"]![1],txtName["period"]![1],txtName["fee"]![1], txtName["rate"]![1]]
+}
+
+
 struct CalinterestView: View {
     var calValue:String
     var intrstValue:String
@@ -20,42 +30,40 @@ struct CalinterestView: View {
     }
 }
 
-
+var list = Array([1])
 
 
 struct SingleView: View {
-    @State var txtName = ""
-    @Binding var txtValue:String
+    @EnvironmentObject var modelData: ModelData
     var body:some View {
-        HStack{
-            Text(txtName)
-            Spacer()
-            TextField("", text: $txtValue)
-            {_ in
-                
-            } onCommit:{
-                
-            }
-            .autocapitalization(.none)
-            .disableAutocorrection(false)
-            .border(Color(UIColor.separator))
-            .frame(width: 180, alignment: .trailing )
-            .keyboardType(.asciiCapableNumberPad)
-        }.padding()
+        ForEach(0..<modelData.names.count){ (index) in
+            HStack{
+                Text(modelData.names[index])
+                Spacer()
+                TextField("", text: $modelData.values[index])
+                {_ in
+                    
+                } onCommit:{
+                    
+                }
+                .autocapitalization(.none)
+                .disableAutocorrection(false)
+                .border(Color(UIColor.separator))
+                .frame(width: 180, alignment: .trailing )
+                .keyboardType(.asciiCapableNumberPad)
+            }.padding()
+        }
+        
     }
 }
 
-let txtName:[String:[String]] = ["loan":["借款金额","10000"], "period":["分期期数（月）","12"],"fee":["每期费率%","0.5"],"rate":["折算年利率%","10"],]
 
 struct ContentView: View {
     
     //显示接受输入内容
    
 
-    let strItems:[String] = [txtName["loan"]![0],txtName["period"]![0],txtName["fee"]![0], txtName["rate"]![0]]
-    
-    @State private var strValues:[String] = [txtName["loan"]![1],txtName["period"]![1],txtName["fee"]![1], txtName["rate"]![1]]
-    
+    @StateObject private var modelData = ModelData()
     
     
     @State private var detaillist = [cal_int_detail]()
@@ -66,9 +74,9 @@ struct ContentView: View {
     // 月利率
     @State private var mRate = ""
     
-    func getValueIndex(name:String) -> Int{
+    func getValueIndex(_ names:[String],name:String) -> Int{
         var index = 0
-        for item in strItems {
+        for item in  names {
             if item==txtName[name]?[0] {
                 break
             }
@@ -78,19 +86,22 @@ struct ContentView: View {
         return index
     }
     
-    func changefeeToInterest(debt:String, periods:String, fee:String, aRate:String) -> String {
+     func changefeeToInterest(debt:String, periods:String, fee:String, aRate:String) -> String {
         let result = ""
         
         if let debt = Double(debt), let per = UInt(periods), let fee = Double(fee), let itrst = Double(aRate) {
             //
             var calc = RateCalculation(periods:per,debt:debt,fee:fee, mRate: 0.0)
             calc.aRate = itrst/100
-            
-            calc.cal_fee_bycal()
+            calc.fee  = fee/100
+            calc.cal_rate_byfee()
+            //calc.cal_fee_byrate()
             detaillist = calc.details
             totalpay = String(format:"%.2f", calc.totalfee)
-            let index = getValueIndex(name: "fee")
-            strValues[index] = String(format:"%.2f", calc.fee*100)// String(calc.fee)
+            let index = getValueIndex(modelData.names, name: "fee")
+            modelData.values[index] = String(format:"%.2f", calc.fee*100)
+            let index2 = getValueIndex(modelData.names, name: "rate")
+            modelData.values[index2] = String(format:"%.2f", calc.aRate*100)
             
             mRate = String(format: "%0.2f", calc.mRate*100)
         }
@@ -104,52 +115,59 @@ struct ContentView: View {
     
     
     var body: some View {
-        
-        VStack()
-        {
-           
-            ForEach(0..<strItems.count,id:\.self){
-                
-                SingleView(txtName: strItems[$0], txtValue: $strValues[$0])
-            }.onChange(of: strValues, perform: { value in
-                let index1 = getValueIndex(name: "loan"), index2 = getValueIndex(name: "period"), index3 = getValueIndex(name: "fee"), index4 = getValueIndex(name: "rate")
-                _ = changefeeToInterest(debt:value[index1], periods:value[index2],fee:value[index3], aRate: value[index4])
-            })
-            HStack{
-                // 计算总还款额
-                Button(action: {
-                    
-                }) {
-                    Text("显示结果")
-                }
-                if mRate != "" {
+        NavigationView{
+            VStack()
+            {
+                SingleView().environmentObject(modelData)
+                    .onChange(of: modelData.values, perform: { value in
+                        let index1 = getValueIndex(modelData.names,name: "loan"), index2 = getValueIndex(modelData.names,name: "period"), index3 = getValueIndex(modelData.names,name: "fee"), index4 = getValueIndex(modelData.names,name: "rate")
+                        print("oldname is \($modelData.values[index4])")
+                        if modelData.values[index1] == value[index1] {
+                            _ = 2+3
+                        }
+                        if modelData.values[index4] == value[index4] {
+                            _ = changefeeToInterest(debt:value[index1], periods:value[index2],fee:value[index3], aRate: value[index4])
+                        }
+                })
+                HStack{
+                    // 计算总还款额
+                    Button(action: {
+                        
+                    }) {
+                        Text("显示结果")
+                    }
+                    if mRate != "" {
+                        Spacer()
+                        Text("月利率 \(mRate)%")
+                    }
                     Spacer()
-                    Text("月利率 \(mRate)%")
+                    if totalpay != "" {
+                        Text("总还款额 \(totalpay)")
+                    }
+                }.padding()
+                
+                if (!detaillist.isEmpty)
+                {
+                    
+                    List(detaillist, id: \.id) { detail in
+                        CalinterestView(calValue: String(format:"%.2f",detail.captl), intrstValue: String(format:"%.2f",detail.intrst))
+                        //SingleView(txtName: "111", txtValue: $strValues[1])
+                        
+                    }
+                    
                 }
                 Spacer()
-                if totalpay != "" {
-                    Text("总还款额 \(totalpay)")
-                }
-            }.padding()
-            
-            if (!detaillist.isEmpty)
-            {
-                
-                List(detaillist, id: \.id) { detail in
-                    CalinterestView(calValue: String(format:"%.2f",detail.captl), intrstValue: String(format:"%.2f",detail.intrst))
-                    //SingleView(txtName: "111", txtValue: $strValues[1])
-                    
-                }
-                
-            }
-            Spacer()
-        }.navigationTitle("贷款计算")
+            }.navigationTitle("贷款计算")
+        }
         
     }
 }
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        Group {
+            ContentView()
+            ContentView()
+        }
     }
 }
 

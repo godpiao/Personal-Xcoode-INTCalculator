@@ -15,6 +15,8 @@ struct cal_int_detail : Hashable{
 
 
 struct mathCalulate {
+    static let minUnit:Double = 0.00001                 //求解的有效数字。
+    
     
     static func getverFun(param:Double, fun:(Double)->Double) ->Double
     {
@@ -57,7 +59,7 @@ struct mathCalulate {
             }
             
             
-            if (right - left < 0.00001 && right - left > -0.00001)
+            if (right - left < minUnit && right - left > -minUnit)
             {
                 break
             }
@@ -86,9 +88,13 @@ struct RateCalculation{
     
     
     //年利率
-    var  aRate:Double = 0.0 {
-        didSet {
-            mRate = pow((1+aRate), 1/12) - 1
+    var  aRate:Double  {
+        get {
+            return pow((1+mRate), 12) - 1
+        }
+        set {
+           // aRate = newValue
+            mRate = pow((1+newValue), 1/12) - 1
         }
     }
     
@@ -113,15 +119,29 @@ struct RateCalculation{
     
     //存储 每期还款本金和利息
     var  details = [cal_int_detail]()
-    mutating func cal_int_byfee()
+    mutating func cal_rate_byfee()
     {
         totalfee = debt * (1 + fee*Double(periods))
         percPi = totalfee / Double(periods)
         
         
+        mRate = mathCalulate.getInverFun(x: fee, n:periods, fun: getPerPayByRate)
+        
+        var restdebt = debt
+        for index in 1...periods{
+            var detail = cal_int_detail(id:Int(index))
+            
+            detail.intrst = restdebt *  mRate
+            detail.captl = percPi - restdebt *  mRate
+            
+            restdebt -= detail.captl
+            
+            details.append(detail)
+            
+        }
     }
     
-    mutating func cal_fee_bycal()
+    mutating func cal_fee_byrate()
     {
         //等额本息计算
         
@@ -131,7 +151,6 @@ struct RateCalculation{
         totalfee  = percPi * Double(periods)
         
         
-        let reverRate = mathCalulate.getInverFun(x: fee, n:periods, fun: getPerPayByRate)
         
         var restdebt = debt
         for index in 1...periods{
