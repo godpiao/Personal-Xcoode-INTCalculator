@@ -50,7 +50,8 @@ struct SingleView: View {
                 .disableAutocorrection(false)
                 .border(Color(UIColor.separator))
                 .frame(width: 180, alignment: .trailing )
-                .keyboardType(.asciiCapableNumberPad)
+                .keyboardType(.decimalPad)
+                .textContentType(.oneTimeCode)
             }.padding()
         }
         
@@ -94,14 +95,18 @@ struct ContentView: View {
             var calc = RateCalculation(periods:per,debt:debt,fee:fee, mRate: 0.0)
             calc.aRate = itrst/100
             calc.fee  = fee/100
-            calc.cal_rate_byfee()
-            //calc.cal_fee_byrate()
+            var calFee = true
+            _ = calFee ? calc.cal_rate_byfee() : calc.cal_fee_byrate()
+          
             detaillist = calc.details
             totalpay = String(format:"%.2f", calc.totalfee)
-            let index = getValueIndex(modelData.names, name: "fee")
-            modelData.values[index] = String(format:"%.2f", calc.fee*100)
-            let index2 = getValueIndex(modelData.names, name: "rate")
-            modelData.values[index2] = String(format:"%.2f", calc.aRate*100)
+            if calFee {
+                let index = getValueIndex(modelData.names, name: "rate")
+                modelData.values[index] = String(format:"%.2f", calc.aRate*100)
+            } else {
+                let index2 = getValueIndex(modelData.names, name: "fee")
+                modelData.values[index2] = String(format:"%.2f", calc.fee*100)
+            }
             
             mRate = String(format: "%0.2f", calc.mRate*100)
         }
@@ -146,6 +151,7 @@ struct ContentView: View {
                     }
                 }.padding()
                 
+                
                 if (!detaillist.isEmpty)
                 {
                     
@@ -153,8 +159,7 @@ struct ContentView: View {
                         CalinterestView(calValue: String(format:"%.2f",detail.captl), intrstValue: String(format:"%.2f",detail.intrst))
                         //SingleView(txtName: "111", txtValue: $strValues[1])
                         
-                    }
-                    
+                    }.listStyle(PlainListStyle())
                 }
                 Spacer()
             }.navigationTitle("贷款计算")
