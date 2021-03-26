@@ -16,10 +16,56 @@ struct cal_int_detail : Hashable{
 
 struct mathCalulate {
     
-    //针对 输入0， 返回0， 并且单调递增或递减的函数 求反函数
-    static func getInverFun(param:Double, fun:(Double)->Double) ->Double
+    static func getverFun(param:Double, fun:(Double)->Double) ->Double
     {
+        let min = 0.000000000001
+        _ = ( fun(param+min) - fun(param) ) / min
         return 0.00
+    }
+    //针对 输入0， 返回0， 并且单调递增的函数 求反函数
+    static func getInverFun(x:Double, n:UInt, fun:(UInt,Double)->Double) ->Double
+    {
+        //
+        var y  = x
+        
+        
+        var left = 0.0
+        var right = y
+        while fun(n,y) < x
+        {
+            left = y
+            y = y * 2
+            right = y
+        }
+        
+        //二分法 逼近
+        
+        y = (left + right) / 2
+        
+        var diff:Double
+        repeat {
+            
+            diff = fun(n,y) - x
+            
+            if diff > 0 {
+                right = y
+                y =  (y + left) / 2
+            }
+            else {
+                left = y
+                y = (y + right) / 2
+            }
+            
+            
+            if (right - left < 0.00001 && right - left > -0.00001)
+            {
+                break
+            }
+        }
+        while (diff != 0)
+        
+        
+        return y
     }
 }
 
@@ -78,12 +124,15 @@ struct RateCalculation{
     mutating func cal_fee_bycal()
     {
         //等额本息计算
-     
+        
+        fee = getPerPayByRate(periods: periods, rate: mRate)
 
-        percPi = debt/Double(periods)  + getPerPayByRate(periods: periods, rate: mRate)
+        percPi = debt/Double(periods)  + debt*fee
         totalfee  = percPi * Double(periods)
         
-        fee = (totalfee-debt)/(Double(periods) * debt)
+        
+        let reverRate = mathCalulate.getInverFun(x: fee, n:periods, fun: getPerPayByRate)
+        
         var restdebt = debt
         for index in 1...periods{
             var detail = cal_int_detail(id:Int(index))
