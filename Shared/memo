@@ -20,6 +20,10 @@ swiftUI 问题：
     
     2. 全局变量 储存数据 试改
     3. State 了解
+    
+    4. onchange跟view对象无关，只跟传入变量有关。
+    
+       数据变化时， 异步调用onchange
 
 
 编写问题遗留：
@@ -33,8 +37,13 @@ swiftUI 问题：
     5. 根据输入实时变化 或 回车变化 (ok)
     
     6. 根据分期费率 反推 年利率
+    
+    7. 留下， fee，rate 没一起更新时的bug
 
 
 
 方法备忘：
     1. for (index,value) in shoppingList.enumerate()
+    
+    2.  // Equivalent to movies.map { $0.name }
+        let movieNames = movies.map(\.name)
